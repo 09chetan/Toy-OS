@@ -1,0 +1,14 @@
+# Build artifacts
+*.o
+*.exe
+*.out
+phase1
+ph2
+
+# Editor / OS files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Output files
+**/output.txt

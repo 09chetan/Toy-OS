@@ -1,0 +1,60 @@
+# OS Simulator Phase 2 - Test Input
+# Format: COMMAND [parameters]
+
+# Create processes with allocated pages
+CREATE 1 10
+CREATE 2 15
+CREATE 3 8
+
+# Access memory addresses (triggers page faults initially)
+ACCESS 1 0
+ACCESS 1 1024
+ACCESS 1 2048
+ACCESS 2 0
+ACCESS 2 5120
+
+# Write to memory addresses
+WRITE 1 512
+WRITE 2 1024
+WRITE 3 0
+
+# Access same pages again (should hit TLB)
+ACCESS 1 0
+ACCESS 1 1024
+
+# Display memory map
+MEMMAP
+
+# More accesses to trigger page replacement
+ACCESS 1 3072
+ACCESS 1 4096
+ACCESS 1 5120
+ACCESS 1 6144
+ACCESS 1 7168
+ACCESS 1 8192
+
+# Check statistics
+STATS
+
+# Write operations
+WRITE 2 2048
+WRITE 3 1024
+
+# Terminate a process
+TERMINATE 1
+
+# Check memory after termination
+MEMMAP
+STATS
+
+# More operations on remaining processes
+ACCESS 2 3072
+ACCESS 3 2048
+
+# Terminate remaining processes
+TERMINATE 2
+TERMINATE 3
+
+# Final statistics
+STATS
+MEMMAP
