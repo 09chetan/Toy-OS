@@ -1,7 +1,12 @@
-🧠 Toy OS Simulator
+# 🧠 Toy OS Simulator
+
 A two-phase operating system simulator that demonstrates core OS concepts — from basic instruction execution to advanced memory management with paging.
 
-📁 Project Structure
+---
+
+## 📁 Project Structure
+
+```
 Toy-OS-Simulator/
 │
 ├── Phase-1/
@@ -15,16 +20,27 @@ Toy-OS-Simulator/
 │   └── output.txt           # Paging simulation output
 │
 └── README.md                # This file
+```
 
-🚀 Quick Start
-Phase 1 — Basic OS Execution
-bashcd Phase-1
+---
+
+## 🚀 Quick Start
+
+### Phase 1 — Basic OS Execution
+
+```bash
+cd Phase-1
 g++ phase1.cpp -o phase1
 ./phase1
-Input: input_Phase1.txt
-Output: output.txt
-Phase 2 — Memory Management & Paging
-bashcd Phase-2
+```
+
+**Input:** `input_Phase1.txt`  
+**Output:** `output.txt`
+
+### Phase 2 — Memory Management & Paging
+
+```bash
+cd Phase-2
 g++ ph2.cpp -o ph2
 ./ph2
 ```
@@ -101,76 +117,101 @@ Control transfers to the MOS, which performs the requested operation.
 Results are written to `output.txt`:
 ```
 HELLO WORLD
-🧠 Key Learning Points
-✅ How an OS loads, runs, and terminates programs
-✅ Instruction cycle: Fetch → Decode → Execute
-✅ I/O handling through software interrupts
+```
+
+### 🧠 Key Learning Points
+
+✅ How an OS loads, runs, and terminates programs  
+✅ Instruction cycle: **Fetch → Decode → Execute**  
+✅ I/O handling through software interrupts  
 ✅ Register-memory interaction basics
 
-🧮 Phase 2 — Memory Management & Paging
-🎯 Objective
-Extend the basic OS with realistic Memory Management Unit (MMU) simulation:
+---
 
-Virtual-to-physical address translation
-Page tables and TLB (Translation Lookaside Buffer)
-Page fault handling and replacement policies
+## 🧮 Phase 2 — Memory Management & Paging
 
-⚙️ System Components
-ComponentDescriptionPage TableMaps virtual pages to physical framesTLBSmall cache for fast address translation (4 entries)Page Fault HandlerLoads missing pages into memoryReplacement PolicyFIFO (First In First Out) for page replacementPCBProcess Control Block — tracks process ID, pages, faults
-🔄 Paging Workflow
+### 🎯 Objective
 
-Program issues memory access → ACCESS 1 1024
-OS checks TLB:
+Extend the basic OS with realistic **Memory Management Unit (MMU)** simulation:
+- Virtual-to-physical address translation
+- Page tables and TLB (Translation Lookaside Buffer)
+- Page fault handling and replacement policies
 
-Hit → Fast translation ✅
-Miss → Check Page Table
+### ⚙️ System Components
 
+| Component | Description |
+|-----------|-------------|
+| **Page Table** | Maps virtual pages to physical frames |
+| **TLB** | Small cache for fast address translation (4 entries) |
+| **Page Fault Handler** | Loads missing pages into memory |
+| **Replacement Policy** | FIFO (First In First Out) for page replacement |
+| **PCB** | Process Control Block — tracks process ID, pages, faults |
 
-If page not in memory → Page Fault:
+### 🔄 Paging Workflow
 
-Load page into free frame
-If memory full → Replace page (FIFO)
-Update TLB
+1. Program issues memory access → `ACCESS 1 1024`
+2. OS checks **TLB**:
+   - **Hit** → Fast translation ✅
+   - **Miss** → Check Page Table
+3. If page not in memory → **Page Fault**:
+   - Load page into free frame
+   - If memory full → Replace page (FIFO)
+   - Update TLB
+4. Perform read/write on resolved physical frame
 
+### 💻 Supported Commands
 
-Perform read/write on resolved physical frame
+| Command | Description |
+|---------|-------------|
+| `CREATE <pid> <pages>` | Create new process with N pages |
+| `ACCESS <pid> <address>` | Read from memory address |
+| `WRITE <pid> <address>` | Write to memory address |
+| `MEMMAP` | Display memory allocation map |
+| `STATS` | Show TLB hits/misses, page faults, free frames |
+| `TERMINATE <pid>` | Free all memory for process |
 
-💻 Supported Commands
-CommandDescriptionCREATE <pid> <pages>Create new process with N pagesACCESS <pid> <address>Read from memory addressWRITE <pid> <address>Write to memory addressMEMMAPDisplay memory allocation mapSTATSShow TLB hits/misses, page faults, free framesTERMINATE <pid>Free all memory for process
-⚙️ Configuration
-ParameterValuePage Size1024 bytesPhysical Memory64 framesVirtual Memory256 pages per processTLB Size4 entries
-📊 Output
+### ⚙️ Configuration
+
+| Parameter | Value |
+|-----------|-------|
+| Page Size | 1024 bytes |
+| Physical Memory | 64 frames |
+| Virtual Memory | 256 pages per process |
+| TLB Size | 4 entries |
+
+### 📊 Output
+
 The simulator logs:
+- Address translations
+- TLB hits/misses
+- Page replacements
+- Page fault statistics
 
-Address translations
-TLB hits/misses
-Page replacements
-Page fault statistics
+### 🧠 Key Learning Points
 
-🧠 Key Learning Points
-✅ How real OS handles virtual memory
-✅ Paging and TLB operation in CPUs
-✅ Dynamic page fault resolution
+✅ How real OS handles virtual memory  
+✅ Paging and TLB operation in CPUs  
+✅ Dynamic page fault resolution  
 ✅ Process memory tracking via PCB
 
-📊 Comparison: Phase 1 vs Phase 2
-ConceptPhase 1Phase 2PurposeBasic OS job executionVirtual memory & pagingMemory ModelSimple 100×4 memory arrayPaging + TLB + Page TableOperationsInstructions (GD, PD, H, etc.)Commands (ACCESS, CREATE, etc.)InterruptsREAD/WRITE/TERMINATEPage Faults, TLB MissesFocusInstruction Cycle & I/OMemory Management & Translation
+---
 
-🛠️ Requirements
+## 📊 Comparison: Phase 1 vs Phase 2
 
-Compiler: g++ (or any C++ compiler)
-C++ Standard: C++11 or later
-OS: Linux, macOS, or Windows (with MinGW)
+| Concept | Phase 1 | Phase 2 |
+|---------|---------|---------|
+| **Purpose** | Basic OS job execution | Virtual memory & paging |
+| **Memory Model** | Simple 100×4 memory array | Paging + TLB + Page Table |
+| **Operations** | Instructions (GD, PD, H, etc.) | Commands (ACCESS, CREATE, etc.) |
+| **Interrupts** | READ/WRITE/TERMINATE | Page Faults, TLB Misses |
+| **Focus** | Instruction Cycle & I/O | Memory Management & Translation |
 
+---
 
-📚 Educational Value
-This project provides hands-on experience with:
+## 🛠️ Requirements
 
-Operating system fundamentals
-Process execution lifecycle
-Memory management techniques
-Virtual memory and paging
-Interrupt-driven I/O
-Address translation mechanisms
+- **Compiler:** g++ (or any C++ compiler)
+- **C++ Standard:** C++11 or later
+- **OS:** Linux, macOS, or Windows (with MinGW)
 
-Perfect for students learning Operating Systems concepts in a practical, interactive way
+---
