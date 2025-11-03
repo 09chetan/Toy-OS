@@ -1,203 +1,176 @@
-# 🧠 Toy OS Project
+🧠 Toy OS Simulator
+A two-phase operating system simulator that demonstrates core OS concepts — from basic instruction execution to advanced memory management with paging.
 
-This project simulates a simple **Toy Operating System** built in two phases:
-
-- **Phase 1:** Basic instruction execution, memory management, and I/O operations.  
-- **Phase 2:** Paging, Memory Management Unit (MMU), and TLB simulation.
-
----
-
-## 📁 Folder Structure
-ToyOS/
+📁 Project Structure
+Toy-OS-Simulator/
 │
-├── Phase1/
-│ ├── phase1.cpp
-│ ├── input_Phase1.txt
-│ 
+├── Phase-1/
+│   ├── phase1.cpp           # Basic OS simulation source code
+│   ├── input_Phase1.txt     # Job input file with control cards
+│   └── output.txt           # Execution output
 │
-├── Phase2/
-│ ├── ph2.cpp
-│ ├── input_phase2.txt
-│ 
+├── Phase-2/
+│   ├── ph2.cpp              # Memory management simulation source code
+│   ├── input_phase2.txt     # Process and memory operation commands
+│   └── output.txt           # Paging simulation output
 │
-├── README.md
-└── .gitignore
+└── README.md                # This file
 
-yaml
-Copy code
-
----
-
-## 🧮 Compilation & Execution Commands
-
-### ▶️ Phase 1
-```bash
-cd Phase1
+🚀 Quick Start
+Phase 1 — Basic OS Execution
+bashcd Phase-1
 g++ phase1.cpp -o phase1
 ./phase1
-Output: output.txt will be generated in the Phase1 folder.
-
-▶️ Phase 2
-bash
-Copy code
-cd Phase2
+Input: input_Phase1.txt
+Output: output.txt
+Phase 2 — Memory Management & Paging
+bashcd Phase-2
 g++ ph2.cpp -o ph2
 ./ph2
-Output: output.txt will be generated in the Phase2 folder.
+```
 
-🧩 Toy OS — Phase 1 🧠
-🧩 Overview
-This phase simulates a basic operating system environment that loads, interprets, and executes simple user programs from an input file.
-It models essential OS concepts such as:
+**Input:** `input_phase2.txt`  
+**Output:** Console and/or `output.txt`
 
-Memory allocation
+---
 
-Instruction execution
+## 🧩 Phase 1 — Basic OS Simulation
 
-Register operations
+### 🎯 Objective
 
-Simple I/O handling via interrupts
+Simulate a simple operating system that can:
+- Load and execute user programs from input files
+- Allocate memory for processes
+- Execute CPU instructions
+- Handle I/O operations through interrupts
 
-The simulation reads control cards ($AMJ, $DTA, $END) and program instructions from an input file (input_Phase1.txt).
+This phase establishes the foundation of **process management** — mimicking how an OS loads and runs batch jobs.
 
-⚙️ Components
-1. Virtual Machine (VM)
-The VM class manages:
+### 📝 Input File Format
 
-Memory (100 × 4 bytes): stores program instructions and data.
+The input file (`input_Phase1.txt`) contains simulated jobs using control cards:
 
-Registers:
+| Control Card | Purpose |
+|--------------|---------|
+| `$AMJ` | Start of job (Assign Memory for Job) |
+| `$DTA` | Start of data section |
+| `$END` | End of job |
 
-IR — Instruction Register
-
-R — General-purpose Register
-
-IC — Instruction Counter
-
-C — Toggle flag (used for conditional branching)
-
-SI — System Interrupt indicator
-
-Buffer: Temporary storage for I/O operations.
-
-2. Master and Slave Modes
-Master Mode (MOS): Handles OS-level operations such as READ, WRITE, and TERMINATE.
-
-Slave Mode (User Program Execution): Executes user-level instructions until an interrupt occurs.
-
-🧮 Supported Instructions
-Instruction	Operation
-GD xx	Get Data — reads a line from input into memory starting at block xx.
-PD xx	Put Data — writes a memory block xx to output.
-H	Halt — terminates program execution.
-LR xx	Load Register — loads data from memory block xx into register R.
-SR xx	Store Register — stores contents of R into memory block xx.
-CR xx	Compare Register — compares R with memory block xx, sets toggle flag C.
-BT xx	Branch Toggle — jumps to memory block xx if C is true.
-
-📂 Input Format
-Example (input_Phase1.txt):
-
-bash
-Copy code
+**Example:**
+```
 $AMJ000100050001
 GD20 PD20 H
 $DTA
 HELLO WORLD
 $END0001
-Explanation:
-$AMJ — Start of job
+```
 
-$DTA — Start of data section
+### ⚙️ System Components
 
-$END — End of job
+| Component | Description |
+|-----------|-------------|
+| **Memory** | 100 blocks × 4 bytes each (simulates RAM) |
+| **Registers** | IR (Instruction Register), R (General Purpose), IC (Instruction Counter), C (Condition Flag) |
+| **MOS** | Master Operating System — handles interrupts (READ, WRITE, TERMINATE) |
+| **Buffer** | Simulates I/O buffer for data transfer |
 
-🧠 Learning Outcomes
-Understanding instruction execution cycles.
+### 💻 Instruction Set
 
-Simulating interrupts and basic OS control.
+| Instruction | Description |
+|-------------|-------------|
+| `GD xx` | **Get Data** — Read from input, load into memory block xx |
+| `PD xx` | **Put Data** — Write memory block xx to output |
+| `LR xx` | **Load Register** — Load memory xx into register R |
+| `SR xx` | **Store Register** — Store R into memory xx |
+| `CR xx` | **Compare Register** — Compare R with memory xx |
+| `BT xx` | **Branch Toggle** — Jump to xx if condition C is true |
+| `H` | **Halt** — Stop execution |
 
-Implementing minimal memory management.
+### 🔔 Interrupt Handling
 
-⚙️ Toy OS — Phase 2 🔧
-🧩 Overview
-This phase extends the Toy OS into a paging and memory management simulator that mimics the behavior of a real MMU (Memory Management Unit).
-It introduces:
+When the CPU needs I/O or must stop, it sets **SI (System Interrupt)**:
+
+- **SI = 1**: READ (GD instruction)
+- **SI = 2**: WRITE (PD instruction)
+- **SI = 3**: TERMINATE (H instruction)
+
+Control transfers to the MOS, which performs the requested operation.
+
+### 📤 Output
+
+Results are written to `output.txt`:
+```
+HELLO WORLD
+🧠 Key Learning Points
+✅ How an OS loads, runs, and terminates programs
+✅ Instruction cycle: Fetch → Decode → Execute
+✅ I/O handling through software interrupts
+✅ Register-memory interaction basics
+
+🧮 Phase 2 — Memory Management & Paging
+🎯 Objective
+Extend the basic OS with realistic Memory Management Unit (MMU) simulation:
 
 Virtual-to-physical address translation
-
 Page tables and TLB (Translation Lookaside Buffer)
+Page fault handling and replacement policies
 
-Page faults and replacement policies
+⚙️ System Components
+ComponentDescriptionPage TableMaps virtual pages to physical framesTLBSmall cache for fast address translation (4 entries)Page Fault HandlerLoads missing pages into memoryReplacement PolicyFIFO (First In First Out) for page replacementPCBProcess Control Block — tracks process ID, pages, faults
+🔄 Paging Workflow
 
-Process creation, termination, and statistics reporting
+Program issues memory access → ACCESS 1 1024
+OS checks TLB:
 
-⚙️ Core Components
-1. Memory Management Unit (MMU)
-Maintains a page table per process.
+Hit → Fast translation ✅
+Miss → Check Page Table
 
-Handles page faults, TLB hits/misses, and page replacements (FIFO policy).
 
-Simulates interrupts such as Page Faults and Segmentation Faults.
+If page not in memory → Page Fault:
 
-2. Process Control Block (PCB)
-Each process tracks:
+Load page into free frame
+If memory full → Replace page (FIFO)
+Update TLB
 
-Process ID (pid)
 
-Page Table entries
+Perform read/write on resolved physical frame
 
-Allocated pages
+💻 Supported Commands
+CommandDescriptionCREATE <pid> <pages>Create new process with N pagesACCESS <pid> <address>Read from memory addressWRITE <pid> <address>Write to memory addressMEMMAPDisplay memory allocation mapSTATSShow TLB hits/misses, page faults, free framesTERMINATE <pid>Free all memory for process
+⚙️ Configuration
+ParameterValuePage Size1024 bytesPhysical Memory64 framesVirtual Memory256 pages per processTLB Size4 entries
+📊 Output
+The simulator logs:
 
-Page fault count
+Address translations
+TLB hits/misses
+Page replacements
+Page fault statistics
 
-Current state (NEW, READY, RUNNING, WAITING, TERMINATED)
+🧠 Key Learning Points
+✅ How real OS handles virtual memory
+✅ Paging and TLB operation in CPUs
+✅ Dynamic page fault resolution
+✅ Process memory tracking via PCB
 
-3. Translation Lookaside Buffer (TLB)
-Stores recent virtual-to-physical page mappings.
+📊 Comparison: Phase 1 vs Phase 2
+ConceptPhase 1Phase 2PurposeBasic OS job executionVirtual memory & pagingMemory ModelSimple 100×4 memory arrayPaging + TLB + Page TableOperationsInstructions (GD, PD, H, etc.)Commands (ACCESS, CREATE, etc.)InterruptsREAD/WRITE/TERMINATEPage Faults, TLB MissesFocusInstruction Cycle & I/OMemory Management & Translation
 
-Uses FIFO replacement when full.
+🛠️ Requirements
 
-Tracks TLB hit/miss statistics.
+Compiler: g++ (or any C++ compiler)
+C++ Standard: C++11 or later
+OS: Linux, macOS, or Windows (with MinGW)
 
-🧮 Supported Commands
-Command	Description
-CREATE <pid> <pages>	Creates a new process with the given number of pages.
-ACCESS <pid> <address>	Accesses a virtual address (read). May trigger a page fault.
-WRITE <pid> <address>	Writes to a virtual address. Marks the page as dirty.
-MEMMAP	Displays current memory allocation for all processes.
-STATS	Prints TLB hit/miss rates and free frame info.
-TERMINATE <pid>	Terminates a process and frees its memory.
 
-📂 Input Format
-Example (input_phase2.txt):
+📚 Educational Value
+This project provides hands-on experience with:
 
-pgsql
-Copy code
-CREATE 1 10
-ACCESS 1 0
-WRITE 1 512
-ACCESS 1 1024
-MEMMAP
-STATS
-TERMINATE 1
-💡 Paging Configuration
-Parameter	Value	Description
-Page Size	1024 bytes	Each page = 1 KB
-Physical Memory	64 frames	64 KB total
-Virtual Memory	256 pages	256 KB per process
-TLB Size	4 entries	FIFO replacement
+Operating system fundamentals
+Process execution lifecycle
+Memory management techniques
+Virtual memory and paging
+Interrupt-driven I/O
+Address translation mechanisms
 
-🧠 Learning Outcomes
-Implementation of paging and address translation.
-
-Simulation of TLB caching and replacement.
-
-Handling of page faults, segmentation faults, and process lifecycle.
-
-Understanding low-level memory management in operating systems.
-
-🏁 Summary
-Phase	Focus	Key Concepts
-Phase 1	Basic OS simulation	Instruction execution, memory & I/O operations
-Phase 2	Advanced memory management	Paging, TLB, page faults, process control
+Perfect for students learning Operating Systems concepts in a practical, interactive way
