@@ -77,7 +77,7 @@ private:
             // --- START OF DATA ---
             else if (line.substr(0, 4) == "$DTA")
             {
-                cout << "Data card loading\n";
+                cout << "Data  loading\n";
                 resetBuffer();
                 STARTEXE();
             }
@@ -91,7 +91,7 @@ private:
             // --- PROGRAM CARD ---
             else
             {
-                cout << "Program Card loading\n";
+                cout << "Program loading\n";
 
                 stringstream ss(line);
                 string instr;
